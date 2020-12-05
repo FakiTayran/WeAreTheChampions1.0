@@ -45,7 +45,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.cboTeamColors = new System.Windows.Forms.ComboBox();
             this.btnRemoveFromTeam = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lstTeams
@@ -224,23 +223,12 @@
             this.btnRemoveFromTeam.Visible = false;
             this.btnRemoveFromTeam.Click += new System.EventHandler(this.btnRemoveFromTeam_Click);
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(342, 6);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(112, 17);
-            this.checkBox1.TabIndex = 22;
-            this.checkBox1.Text = "HideClosedTeams";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // TeamsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(466, 357);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.btnRemoveFromTeam);
             this.Controls.Add(this.cboTeamColors);
             this.Controls.Add(this.label4);
@@ -288,6 +276,5 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cboTeamColors;
         private System.Windows.Forms.Button btnRemoveFromTeam;
-        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

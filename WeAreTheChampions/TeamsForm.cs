@@ -34,6 +34,7 @@ namespace WeAreTheChampions
         {
             btnSave.Enabled = false;
             btnCancel.Visible = false;
+            btnAddNewTeams.Enabled = false;
             if (lstTeams.SelectedIndex < 0)
             {
                 MessageBox.Show("Lütfen değişiklikleri kaydetmek istediğiniz takımı seçiniz.");
@@ -49,7 +50,7 @@ namespace WeAreTheChampions
                     MessageBox.Show("closed kelimesi bir takım ismi belirlerken kullanılamaz");
                     return;
                 }
-                if (txtTeamName.Text=="")
+                if (txtTeamName.Text == "")
                 {
                     MessageBox.Show("Takım ismi boş girilemez");
                     return;
@@ -130,12 +131,11 @@ namespace WeAreTheChampions
                 }
                 return;
             }
-            if (cboColors.SelectedIndex >= 0 )
+            if (cboColors.SelectedIndex >= 0)
             {
                 Models.Color color = cboColors.SelectedItem as Models.Color;
                 team.Colors.Add(color);
             }
-
             db.Teams.Add(team);
             db.SaveChanges();
             lstTeams.DataSource = db.Teams.ToList();
@@ -146,12 +146,14 @@ namespace WeAreTheChampions
         {
             btnSave.Enabled = true;
             btnCancel.Visible = true;
+            btnAddNewTeams.Enabled = false;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             btnCancel.Visible = false;
             btnSave.Enabled = false;
+            btnAddNewTeams.Enabled = false;
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -163,21 +165,24 @@ namespace WeAreTheChampions
             }
             Team team = lstTeams.SelectedItem as Team;
             int seciliIndeks = lstTeams.SelectedIndex;
+            if (team.TeamName.Contains("(closed)") && (team.AwayMatches.Count != 0 || team.HomeMatches.Count != 0 ))
+            {
+                MessageBox.Show("Bu takımın maçı var ve zaten kapanmış tamamen silmek için mevcut maçını silin");
+                return;
+            }
 
-            if (team.HomeMatches != null || team.AwayMatches != null)
+            if (team.HomeMatches.Count != 0 || team.AwayMatches.Count != 0)
             {
                 team.TeamName = $"{team.TeamName}(closed)";
-                for (int i = 0; i <= team.Players.Count; i++)
+                if (team.Players.Count > 0)
                 {
-                    var s = team.Players.ToArray();
-                    Player player = s[0];
-                    team.Players.Remove(player);
+                    for (int i = 0; i <= team.Players.Count; i++)
+                    {
+                        var s = team.Players.ToArray();
+                        Player player = s[0];
+                        team.Players.Remove(player);
+                    }
                 }
-            }
-            if (team.TeamName.Contains("(closed)"))
-            {
-                MessageBox.Show("Bu takım zaten kapanmış");
-                return;
             }
             else
             {
@@ -198,7 +203,6 @@ namespace WeAreTheChampions
                 }
             }
         }
-
         private void btnPlayers_Click(object sender, EventArgs e)
         {
             if (lstTeams.SelectedIndex < 0)
@@ -214,7 +218,6 @@ namespace WeAreTheChampions
             }
             frmTeamsPlayers frm = new frmTeamsPlayers(db, team);
             frm.ShowDialog();
-
         }
 
         private void cboColors_SelectedIndexChanged(object sender, EventArgs e)
@@ -232,9 +235,7 @@ namespace WeAreTheChampions
             {
                 btnAddColorToTeam.Visible = true;
             }
-
         }
-
         private void btnAddColorToTeam_Click(object sender, EventArgs e)
         {
             if (lstTeams.SelectedIndex < 0)
@@ -260,8 +261,6 @@ namespace WeAreTheChampions
             db.SaveChanges();
             lstTeams.DataSource = db.Teams.ToList();
             lstTeams.SelectedIndex = selectedIndeks;
-
-
         }
 
         private void btnRemoveFromTeam_Click(object sender, EventArgs e)

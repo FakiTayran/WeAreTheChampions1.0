@@ -71,6 +71,11 @@ namespace WeAreTheChampions
             Match match = db.Matches.FirstOrDefault(x => x.Id == id);
             Team homeTeam = cboHomeTeam.SelectedItem as Team;
             Team guestTeam = cboGuestTeam.SelectedItem as Team;
+            if (homeTeam.TeamName.Contains("closed") || guestTeam.TeamName.Contains("closed"))
+            {
+                MessageBox.Show("Kapanmış takımlara maç ayarlanamaz");
+                return;
+            }
             if (homeTeam == guestTeam)
             {
                 MessageBox.Show("Takımlar aynı girilemez");

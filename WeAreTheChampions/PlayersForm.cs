@@ -36,12 +36,18 @@ namespace WeAreTheChampions
                 return;
             }
 
-            if (cboTeams.SelectedIndex >= 0)
+            if (cboTeams.SelectedIndex >= 0 )
             {
                 Team team = cboTeams.SelectedItem as Team;
+                if (team.TeamName.Contains("closed"))
+                {
+                    MessageBox.Show("Bu takım kapanmış oyuncu eklenemez");
+                    return;
+                }
                 team.Players.Add(player);
             }
             db.Players.Add(player);
+           
             db.SaveChanges();
             lstPlayers.DataSource = db.Players.ToList();
             lstPlayers.SelectedIndex = lstPlayers.Items.Count - 1;
@@ -89,6 +95,11 @@ namespace WeAreTheChampions
             Player player = lstPlayers.SelectedItem as Player;
             Team team = cboTeams.SelectedItem as Team;
             int seciliPlayer = lstPlayers.SelectedIndex;
+            if (lstPlayers.Items.Count == 0)
+            {
+                MessageBox.Show("Silinecek oyuncu bulunmuyor");
+                return;
+            }
             db.Players.Remove(player);
             db.SaveChanges();
             if (cbFilter.Checked == true)
@@ -138,6 +149,11 @@ namespace WeAreTheChampions
             if (cboTeams.SelectedIndex >= 0)
             {
                 Team team = cboTeams.SelectedItem as Team;
+                if (team.TeamName.Contains("closed"))
+                {
+                    MessageBox.Show("Bu takım kapanmış oyuncu eklenemez");
+                    return;
+                }
                 player.Team = team;
             }
             if (txtPlayerName.Text == "")

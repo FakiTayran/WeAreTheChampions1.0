@@ -89,13 +89,16 @@ namespace WeAreTheChampions
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            if (dgvMatches.Rows.Count==0)
+            {
+                MessageBox.Show("Silinecek maç yok");
+                return;
+            }
             int id = (int)dgvMatches.SelectedRows[0].Cells[0].Value;
             Match match = db.Matches.FirstOrDefault(x => x.Id == id);
-
             db.Matches.Remove(match);
             db.SaveChanges();
             PrintData();
-
         }
     }
 }
