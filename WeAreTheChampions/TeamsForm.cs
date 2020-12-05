@@ -13,6 +13,7 @@ namespace WeAreTheChampions
     public partial class TeamsForm : Form
     {
         private readonly WeAreTheChampionsContext db;
+        public List<Team> DeletedTeams = new List<Team>();
         public TeamsForm(WeAreTheChampionsContext db)
         {
             this.db = db;
@@ -43,6 +44,16 @@ namespace WeAreTheChampions
                 int seciliIndeks = lstTeams.SelectedIndex;
                 Team team = lstTeams.SelectedItem as Team;
                 team.TeamName = txtTeamName.Text;
+                if (txtTeamName.Text.Contains("closed"))
+                {
+                    MessageBox.Show("closed kelimesi bir takım ismi belirlerken kullanılamaz");
+                    return;
+                }
+                if (txtTeamName.Text=="")
+                {
+                    MessageBox.Show("Takım ismi boş girilemez");
+                    return;
+                }
                 lstTeams.DataSource = db.Teams.ToList();
                 lstTeams.SelectedIndex = seciliIndeks;
                 db.SaveChanges();
@@ -55,7 +66,7 @@ namespace WeAreTheChampions
             cboTeamColors.Visible = true;
             btnRemoveFromTeam.Visible = true;
             panel1.Visible = true;
-            if (cboColors.SelectedIndex>=0)
+            if (cboColors.SelectedIndex >= 0)
             {
                 btnAddColorToTeam.Visible = true;
             }
@@ -95,6 +106,11 @@ namespace WeAreTheChampions
                 MessageBox.Show("Lütfen bir takım adı giriniz");
                 return;
             }
+            else if (txtTeamName.Text.Contains("closed"))
+            {
+                MessageBox.Show("closed kelimesi bir takım ismi belirlerken kullanılamaz");
+                return;
+            }
             if (db.Teams.Any(x => x.TeamName == team.TeamName))
             {
                 DialogResult dr = new DialogResult();
@@ -114,11 +130,12 @@ namespace WeAreTheChampions
                 }
                 return;
             }
-            if (cboColors.SelectedIndex >= 0)
+            if (cboColors.SelectedIndex >= 0 )
             {
                 Models.Color color = cboColors.SelectedItem as Models.Color;
                 team.Colors.Add(color);
             }
+
             db.Teams.Add(team);
             db.SaveChanges();
             lstTeams.DataSource = db.Teams.ToList();
@@ -146,7 +163,26 @@ namespace WeAreTheChampions
             }
             Team team = lstTeams.SelectedItem as Team;
             int seciliIndeks = lstTeams.SelectedIndex;
-            db.Teams.Remove(team);
+
+            if (team.HomeMatches != null || team.AwayMatches != null)
+            {
+                team.TeamName = $"{team.TeamName}(closed)";
+                for (int i = 0; i <= team.Players.Count; i++)
+                {
+                    var s = team.Players.ToArray();
+                    Player player = s[0];
+                    team.Players.Remove(player);
+                }
+            }
+            if (team.TeamName.Contains("(closed)"))
+            {
+                MessageBox.Show("Bu takım zaten kapanmış");
+                return;
+            }
+            else
+            {
+                db.Teams.Remove(team);
+            }
             db.SaveChanges();
             lstTeams.DataSource = db.Teams.ToList();
 
@@ -171,6 +207,11 @@ namespace WeAreTheChampions
                 return;
             }
             Team team = (Team)lstTeams.SelectedItem;
+            if (team.TeamName.Contains("closed"))
+            {
+                MessageBox.Show("Bu takım kapanmış olduğu için oyuncusu yok ve transfer yapılamaz.");
+                return;
+            }
             frmTeamsPlayers frm = new frmTeamsPlayers(db, team);
             frm.ShowDialog();
 
@@ -238,8 +279,6 @@ namespace WeAreTheChampions
                 cboTeamColors.Items.Add(s[i]);
             }
             lstTeams.SelectedIndex = selectedIndeks;
-
-
         }
     }
 }

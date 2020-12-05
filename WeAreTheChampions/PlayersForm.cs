@@ -140,7 +140,11 @@ namespace WeAreTheChampions
                 Team team = cboTeams.SelectedItem as Team;
                 player.Team = team;
             }
-
+            if (txtPlayerName.Text == "")
+            {
+                MessageBox.Show("Oyuncu adı boş geçilemez");
+                return;
+            }
             db.SaveChanges();
             if (cbFilter.Checked == false)
             {
