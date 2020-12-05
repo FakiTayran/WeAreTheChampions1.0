@@ -14,6 +14,7 @@ namespace WeAreTheChampions.Models
         public Team()
         {
             Colors = new HashSet<Color>();
+            Players = new HashSet<Player>();
         }
         public int Id { get; set; }
 

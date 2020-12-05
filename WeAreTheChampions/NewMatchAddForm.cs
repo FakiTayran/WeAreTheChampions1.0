@@ -19,6 +19,8 @@ namespace WeAreTheChampions
         {
             this.db = db;
             InitializeComponent();
+            dtMatchTime.Format = DateTimePickerFormat.Custom;
+            dtMatchTime.CustomFormat = "MM/dd/yyyy hh:mm:ss";
             cboHomeTeam.DataSource = db.Teams.ToList();
             cboGuestTeam.DataSource = db.Teams.ToList();
             nudScoreGuestTeam.Enabled = false;
