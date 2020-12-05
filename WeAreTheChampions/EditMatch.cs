@@ -86,7 +86,7 @@ namespace WeAreTheChampions
             DateTime nowDateTime = DateTime.Now;
             if (match.MatchTime != null)
             {
-                DateTime matchDateTime = match.MatchTime.Value;
+                DateTime matchDateTime = dtMatchTime.Value;
 
                 if (DateTime.Compare(matchDateTime, nowDateTime) < 0)
                 {
