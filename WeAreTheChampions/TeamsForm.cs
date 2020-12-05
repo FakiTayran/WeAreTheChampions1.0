@@ -34,7 +34,7 @@ namespace WeAreTheChampions
         {
             btnSave.Enabled = false;
             btnCancel.Visible = false;
-            btnAddNewTeams.Enabled = false;
+            btnAddNewTeams.Enabled = true;
             if (lstTeams.SelectedIndex < 0)
             {
                 MessageBox.Show("Lütfen değişiklikleri kaydetmek istediğiniz takımı seçiniz.");
@@ -153,7 +153,7 @@ namespace WeAreTheChampions
         {
             btnCancel.Visible = false;
             btnSave.Enabled = false;
-            btnAddNewTeams.Enabled = false;
+            btnAddNewTeams.Enabled = true;
         }
 
         private void btnDelete_Click(object sender, EventArgs e)

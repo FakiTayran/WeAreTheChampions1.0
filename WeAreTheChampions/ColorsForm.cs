@@ -158,6 +158,11 @@ namespace WeAreTheChampions
             color.Blue = tbBlue.Value;
             color.ColorName = txtColorName.Text;
 
+            if (txtColorName.Text == "")
+            {
+                MessageBox.Show("Renk adı boş geçilemez");
+                return;
+            }
             db.SaveChanges();
             lstAvailableColors.DataSource = db.Colors.ToList();
             lstAvailableColors.SelectedIndex = seciliIndeks;
